@@ -92,14 +92,14 @@ class CarController():
         can_sends.append(subarucan.create_es_lkas(self.packer, CS.es_lkas_msg, enabled, visual_alert, left_line, right_line, left_lane_depart, right_lane_depart))
         self.es_lkas_cnt = CS.es_lkas_msg["Counter"]
 
-    new_actuators = actuators.copy()
-    new_actuators.steer = self.apply_steer_last / self.p.STEER_MAX
-
 # 2022/1/11 >>
 # Add ES_Status_2
       if self.es_status_2_cnt != CS.es_status_2_msg["Counter"]:
          can_sends.append(subarucan.create_es_status_2(self.packer, CS.es_status_2_msg))
          self.es_status_2_cnt = CS.es_status_2_msg["Counter"]
 # 2022/1/11 <<
+
+    new_actuators = actuators.copy()
+    new_actuators.steer = self.apply_steer_last / self.p.STEER_MAX
 
     return new_actuators, can_sends

@@ -25,6 +25,12 @@ def create_es_distance(packer, es_distance_msg, pcm_cancel_cmd):
   if pcm_cancel_cmd:
     values["Cruise_Cancel"] = 1
 
+# 2021/12/29 >>
+# Add LKAS_Left_Line_Enable, LKAS_Right_Line_Enable and ES_Distance Signal1 static values for testing
+  # Enable LKAS for market specific models
+  values["Signal1"] = 1
+# 2021/12/29 <<
+
   return packer.make_can_msg("ES_Distance", 0, values)
 
 def create_es_lkas(packer, es_lkas_msg, enabled, visual_alert, left_line, right_line, left_lane_depart, right_lane_depart):
@@ -59,7 +65,33 @@ def create_es_lkas(packer, es_lkas_msg, enabled, visual_alert, left_line, right_
   values["LKAS_Left_Line_Visible"] = int(left_line)
   values["LKAS_Right_Line_Visible"] = int(right_line)
 
+  # Enable LKAS for market specific models
+# 2021/12/29 >>
+# Add support for models with factory-disabled LKAS
+  values["LKAS_Enable_1"] = 0
+  values["LKAS_Enable_2"] = 3
+# 2021/12/29 <<
+# 2021/12/29 >>
+# Add LKAS_Left_Line_Enable, LKAS_Right_Line_Enable and ES_Distance Signal1 static values for testing
+# 2021/12/31 >>
+# remove LKAS Line Enable signals
+  #values["LKAS_Left_Line_Enable"] = 1
+  #values["LKAS_Right_Line_Enable"] = 1
+# 2021/12/31 <<
+# 2021/12/29 <<
+
   return packer.make_can_msg("ES_LKAS_State", 0, values)
+
+# 2022/1/11 >>
+# Add ES_Status_2
+def create_es_status_2(packer, es_status_2_msg):
+  values = copy.copy(es_status_2_msg)
+
+  # Enable LKAS for market specific models
+  values["Signal1"] = 8
+
+  return packer.make_can_msg("ES_Status_2", 0, values)
+# 2022/1/11 <<
 
 # *** Subaru Pre-global ***
 

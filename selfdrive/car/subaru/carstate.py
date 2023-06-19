@@ -72,6 +72,11 @@ class CarState(CarStateBase):
       ret.cruiseState.nonAdaptive = cp_cam.vl["ES_DashStatus"]["Conventional_Cruise"] == 1
       self.es_lkas_msg = copy.copy(cp_cam.vl["ES_LKAS_State"])
     self.es_distance_msg = copy.copy(cp_cam.vl["ES_Distance"])
+# 2022/1/11 >>
+# Add ES_Status_2
+# ES_Status_2 carstate fix
+    self.es_status_2_msg = copy.copy(cp_cam.vl["ES_Status_2"])
+# 2022/1/11 <<
 
     # dp - brake lights
     ret.brakeLights = ret.brakePressed
@@ -224,12 +229,30 @@ class CarState(CarStateBase):
         ("LKAS_Right_Line_Visible", "ES_LKAS_State"),
         ("LKAS_Alert", "ES_LKAS_State"),
         ("Signal3", "ES_LKAS_State"),
+# 2021/12/29 >>
+# Add support for models with factory-disabled LKAS
+        ("LKAS_Enable_1", "ES_LKAS_State", 0),
+        ("Signal4", "ES_LKAS_State", 0),
+        ("LKAS_Enable_2", "ES_LKAS_State", 0),
+        ("Signal5", "ES_LKAS_State", 0),
+# 2021/12/29 <<
+
+# 2022/1/11 >>
+# Add ES_Status_2
+        ("Counter", "ES_Status_2", 0),
+        ("Signal1", "ES_Status_2", 0),
+        ("Signal2", "ES_Status_2", 0),
+# 2022/1/11 <<
       ]
 
       checks = [
         ("ES_DashStatus", 10),
         ("ES_Distance", 20),
         ("ES_LKAS_State", 10),
+# 2022/1/11 >>
+# Add ES_Status_2
+        ("ES_Status_2", 10),
+# 2022/1/11 <<
       ]
 
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 2)
